@@ -1,0 +1,16 @@
+[project]
+name = "gymshark-api-data-pipeline"
+version = "0.1.0"
+description = "Gymshark Algolia API ETL pipeline"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "requests>=2.31.0",
+  "pandas>=2.1.0",
+  "python-dotenv>=1.0.0",
+  "psycopg2-binary>=2.9.9",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
