@@ -89,6 +89,53 @@ Gymshark Frontend
                 └── Analytics-Ready Features
 
 ```
+#Diagram
+```text
+                 GYMSHARK WEBSITE
+                        │
+                        ▼
+                  ALGOLIA API
+                        │
+                        ▼
+                ┌──────────────┐
+                │ Python       │
+                │ Collector    │
+                └──────┬───────┘
+                       │
+                  40 products
+                       │
+                       ▼
+                ┌──────────────┐
+                │ Parse &      │
+                │ Normalize    │
+                └──────┬───────┘
+                       │
+                       ▼
+                ┌──────────────┐
+                │ Data Quality │
+                │ Checks       │
+                └──────┬───────┘
+                       │
+              valid records
+                       │
+                       ▼
+                ┌──────────────┐
+                │ PostgreSQL   │
+                └──────┬───────┘
+                       │
+       ┌───────────────┼────────────────┐
+       ▼               ▼                ▼
+ raw_listings       listings      listing_snapshots
+ original JSON      clean data     historical data
+                                           │
+                                           ▼
+                                   listing_features
+
+                pipeline_runs
+                      ↑
+             tracks each execution
+```
+             
 #Data flow
 ```text
 
