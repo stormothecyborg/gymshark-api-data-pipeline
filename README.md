@@ -4,7 +4,7 @@ This project builds a realistic end-to-end ETL pipeline that consumes Gymsharkâ€
 
 ## 1. Project objective
 
-The goal is to demonstrate a production-style data engineering workflow using:
+The goal is to demonstrate a production-style data engineering workflow using::
 
 - reverse-engineered API discovery through browser network inspection
 - direct API extraction instead of scraping HTML
