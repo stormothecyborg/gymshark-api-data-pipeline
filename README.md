@@ -107,7 +107,7 @@ Track Historical Snapshots
 Generate Analytics Features
 
 
-```markdown
+```
 ## 5. Project Structure
 
 ```text
@@ -167,9 +167,12 @@ The collector in `src/collectors/gymshark_api.py`:
 - returns raw product hits while preserving the original payload shape
 - generates a request identifier and timestamps for traceability
 
+```
 ## 7. Transformation and normalization
 
 The parser in `src/parsers/gymshark_parser.py` extracts and normalizes:
+```text
+
 
 - listing ID
 - product title
@@ -188,7 +191,7 @@ The parser in `src/parsers/gymshark_parser.py` extracts and normalizes:
 
 The normalization layer cleans string values, coerces numeric prices, handles nullable fields, and safely defends against malformed nested JSON structures.
 
-
+```
 
 ## 8. PostgreSQL schema
 
@@ -204,14 +207,7 @@ The SQL schema in `src/database/schema.sql` creates the following tables:
 ## 6. Database Schema
 
 The SQL schema in `src/database/schema.sql` creates the following tables:
-
-| Table | Columns |
-|---|---|
-| `raw_listings` | `raw_id`, `source`, `scraped_at`, `request_id`, `raw_payload`, `listing_url` |
-| `listings` | `listing_id`, `source`, `title`, `category`, `brand`, `product_url`, `sku`, `currency`, `first_seen_at`, `last_seen_at` |
-| `listing_snapshots` | `snapshot_id`, `listing_id`, `source`, `observed_at`, `price`, `old_price`, `availability`, `raw_id` |
-| `pipeline_runs` | `run_id`, `started_at`, `finished_at`, `source`, `rows_extracted`, `rows_cleaned`, `rows_rejected`, `status`, `error_message`, `duration_seconds` |
-| `listing_features` | `listing_id`, `source`, `computed_at`, `current_price`, `price_change_pct_7d`, `price_change_pct_30d`, `days_tracked`, `is_available`, `availability_change_count` |
+```text
 
 - raw_listings
   - raw_id
@@ -265,7 +261,7 @@ The SQL schema in `src/database/schema.sql` creates the following tables:
   - days_tracked
   - is_available
   - availability_change_count
-
+```
 ## 9. Data quality and validation
 
 The validation logic in `src/quality/checks.py` checks for:
@@ -283,6 +279,7 @@ Rejected records are not silently ignored. The pipeline tracks validation issues
 ## 10. Reliability and failure handling
 
 The pipeline includes:
+```text
 
 - HTTP timeout enforcement
 - API retries with exponential backoff
@@ -293,7 +290,7 @@ The pipeline includes:
 - clear failure propagation instead of silent partial success
 
 A critical API or database failure results in a failed pipeline run with a captured error message.
-
+```
 ## 11. Historical tracking strategy
 
 The historical snapshot table is designed to support analyses such as:
