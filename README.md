@@ -88,8 +88,10 @@ Gymshark Frontend
             └── listing_features
                 └── Analytics-Ready Features
 
-
+```
 #Data flow
+```text
+
 API
  ↓
 Extract
@@ -167,7 +169,7 @@ The collector in `src/collectors/gymshark_api.py`:
 - returns raw product hits while preserving the original payload shape
 - generates a request identifier and timestamps for traceability
 
-```
+
 ## 7. Transformation and normalization
 
 The parser in `src/parsers/gymshark_parser.py` extracts and normalizes:
