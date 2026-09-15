@@ -48,45 +48,113 @@ The response contains a `hits` array with product objects and fields such as `ob
 
 ## 4. Architecture
 
-The project follows this flow:
-
+```text
 Gymshark Frontend
-↓
-Algolia API discovered in browser Network tab
-↓
-Python collector
-↓
-Raw JSON persistence
-↓
-Parser and normalizer
-↓
-Quality validation and rejection tracking
-↓
-PostgreSQL
-↓
-Historical snapshots
-↓
-Analytics-ready features
+│
+└── Algolia API
+    │
+    └── Python Data Pipeline
+        │
+        ├── API Collector
+        │   ├── API Requests
+        │   ├── Pagination
+        │   ├── Retries
+        │   └── Request Tracking
+        │
+        ├── Parser & Normalizer
+        │   ├── Parse JSON
+        │   ├── Extract Product Data
+        │   └── Normalize Fields
+        │
+        ├── Data Quality
+        │   ├── Validate Records
+        │   ├── Track Rejected Records
+        │   └── Quality Metrics
+        │
+        └── PostgreSQL
+            │
+            ├── raw_listings
+            │   └── Original API Responses
+            │
+            ├── listings
+            │   └── Clean Product Data
+            │
+            ├── listing_snapshots
+            │   └── Historical Product Observations
+            │
+            ├── pipeline_runs
+            │   └── Pipeline Execution & Monitoring
+            │
+            └── listing_features
+                └── Analytics-Ready Features
 
-## 5. Project structure
 
-- src/collectors/gymshark_api.py
-- src/parsers/gymshark_parser.py
-- src/transformations/normalize.py
-- src/transformations/features.py
-- src/quality/checks.py
-- src/database/connection.py
-- src/database/repository.py
-- src/database/schema.sql
-- src/config/settings.py
-- src/pipeline.py
-- tests/
-- sql/analysis_queries.sql
-- scripts/run_pipeline.py
-- .env
-- .env.example
-- requirements.txt
-- pyproject.toml
+#Data flow
+API
+ ↓
+Extract
+ ↓
+Parse
+ ↓
+Transform
+ ↓
+Validate
+ ↓
+Load into PostgreSQL
+ ↓
+Track Historical Snapshots
+ ↓
+Generate Analytics Features
+
+
+```markdown
+## 5. Project Structure
+
+```text
+gymshark-api-data-pipeline/
+│
+├── src/
+│   ├── collectors/
+│   │   └── gymshark_api.py
+│   │
+│   ├── parsers/
+│   │   └── gymshark_parser.py
+│   │
+│   ├── transformations/
+│   │   ├── normalize.py
+│   │   └── features.py
+│   │
+│   ├── quality/
+│   │   └── checks.py
+│   │
+│   ├── database/
+│   │   ├── connection.py
+│   │   ├── repository.py
+│   │   └── schema.sql
+│   │
+│   ├── config/
+│   │   └── settings.py
+│   │
+│   └── pipeline.py
+│
+├── tests/
+│   ├── test_api_collector.py
+│   ├── test_features.py
+│   ├── test_parser.py
+│   ├── test_quality.py
+│   └── test_repository.py
+│
+├── sql/
+│   └── analysis_queries.sql
+│
+├── scripts/
+│   └── run_pipeline.py
+│
+├── .env.example
+├── .gitignore
+├── requirements.txt
+├── pyproject.toml
+└── README.md
 
 ## 6. Extraction layer
 
@@ -120,6 +188,8 @@ The parser in `src/parsers/gymshark_parser.py` extracts and normalizes:
 
 The normalization layer cleans string values, coerces numeric prices, handles nullable fields, and safely defends against malformed nested JSON structures.
 
+
+
 ## 8. PostgreSQL schema
 
 The database is expected to use the existing local PostgreSQL instance with these settings:
@@ -130,6 +200,18 @@ The database is expected to use the existing local PostgreSQL instance with thes
 - user: listing_tracker_user
 
 The SQL schema in `src/database/schema.sql` creates the following tables:
+
+## 6. Database Schema
+
+The SQL schema in `src/database/schema.sql` creates the following tables:
+
+| Table | Columns |
+|---|---|
+| `raw_listings` | `raw_id`, `source`, `scraped_at`, `request_id`, `raw_payload`, `listing_url` |
+| `listings` | `listing_id`, `source`, `title`, `category`, `brand`, `product_url`, `sku`, `currency`, `first_seen_at`, `last_seen_at` |
+| `listing_snapshots` | `snapshot_id`, `listing_id`, `source`, `observed_at`, `price`, `old_price`, `availability`, `raw_id` |
+| `pipeline_runs` | `run_id`, `started_at`, `finished_at`, `source`, `rows_extracted`, `rows_cleaned`, `rows_rejected`, `status`, `error_message`, `duration_seconds` |
+| `listing_features` | `listing_id`, `source`, `computed_at`, `current_price`, `price_change_pct_7d`, `price_change_pct_30d`, `days_tracked`, `is_available`, `availability_change_count` |
 
 - raw_listings
   - raw_id
