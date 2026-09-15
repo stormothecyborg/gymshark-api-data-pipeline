@@ -155,7 +155,7 @@ gymshark-api-data-pipeline/
 ├── requirements.txt
 ├── pyproject.toml
 └── README.md
-
+```
 ## 6. Extraction layer
 
 The collector in `src/collectors/gymshark_api.py`:
@@ -201,10 +201,6 @@ The database is expected to use the existing local PostgreSQL instance with thes
 - port: 5432
 - database: listing_tracker
 - user: listing_tracker_user
-
-The SQL schema in `src/database/schema.sql` creates the following tables:
-
-## 6. Database Schema
 
 The SQL schema in `src/database/schema.sql` creates the following tables:
 ```text
