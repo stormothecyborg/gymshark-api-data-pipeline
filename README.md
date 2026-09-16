@@ -440,4 +440,4 @@ pipeline_runs + listing_features
 SQL analytics and ML feature pipelines
 ```
 
-This project is intentionally built to be realistic, explainable, and interview-ready while remaining simple enough to run locally in a standard Python + PostgreSQL environment.
+
